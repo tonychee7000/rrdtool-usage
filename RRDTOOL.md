@@ -60,7 +60,7 @@ RRDtool的创建功能能够设置一个新的RRD数据库文件。该功能完�
     定义了数据源提供、预期的数值范围。任何数据源的超过min或max数值范围的数值，都将被认为是UNKNOWN 。如果你不知道或者不关心mix和max, 将他们设置为 unknown。注意min和max总是值数据源所处理的数值。对于一个流量计数器类型的DS来说，这可以是预期中该设备获取的数据率。  
 如果有可用的min/max的值信息，一定要设置min和max属性。这可以帮助RRDtool在更新时对提供的数据进行健壮检查。
 
-    - **rpn－expression**  
+    - **rpn-expression**  
 定义了由同一个RRD库的其他数据源的计算而来的、某个COMPUTE数据源的PDPs计算公式。这于graph命令的CDEF参数一样。请参看graph手册了解RPN操作符的列表和说明。对于COMPUTE数据源，不支持以下RPN操作符：COUNT、PREV、TIME、和LTIME。此外，在定义RPN表达式时，COMPUTE数据源只能够引用在create命令中列出的数据源。这于CDEF的限制是一样的，CDEF只能够引用在同一个graph命令中前面定义的DEFs和CDEFs。
 
 * **RRA:CF:cf arguments**  
@@ -69,7 +69,7 @@ RRDtool的创建功能能够设置一个新的RRD数据库文件。该功能完�
 该数据也会被用该归档的CF归并函数进行处理。可以把各个PDPs通过某个聚合函数进行归并的归并函数有这样几种：AVERAGE、MIN、MAX、LAST等。这些归并函数的RRA命令行格式为:  
     ```
     RRA:AVERAGE | MIN | MAX | LAST:xff:steps:rows
-    ```
+    ```  
 
     - **xff**  
 xfiles factor定义了在被归并数值仍然是一个未知时，*UNKNOWN*数据中，某个归并间隔的哪个部分可以采用。
@@ -168,10 +168,13 @@ Y轴负值高度
 * **[-r|--rigid]**
 
 * **DEF:vname=rrdfile:ds-name:CF[:step=step][:start=time][:end=time]**
+主要用处是说明您要取出那个RRD档案的 DSN 到这个 graph 的参数中来 
 
 * **CDEF:vname=RPN expression**
+CDEF 通过运算得到一个虚拟的变量，其运算式需写成后序
+EX: a=1+3 写成 `a=1,3 +`
 
 * **VDEF:vname=RPN expression**
 
 
-主要用处是说明您要取出那个RRD档案的 DSN 到这个 graph 的参数中来 CDEF 通过运算得到一个虚拟的变量,,其运算式需写成后序 EX: a=1+3 写成 a=1,3 + LINE{1|2|3}:vname[#rrggbb[:legend]] LINE1:your_var#rgb颜色值:图例说明,这个 "your_var" 需存在 DEF 或 CDEF 的宣告中, AREA:vname[#rrggbb[:legend]] AREA 画出样本数值至 0 之间的区块图 STACK:vname[#rrggbb[:legend]] STACK 叠在上一个值上的图形 请注意,如果使用 AREA/STACK 时需特别注意图盖图的问题,一定要先画大的值, 再画小的值,这才会有层次的效果,不然,最大的数据若最后画,会盖住前面的数据 COMMENT 说明文字,如 COMMENT:"Last Updated" 将在图上产生该文字,可以用 \n 等换行符号 GPRINT GPRINT:vname:CF:format vname 即DEF 中的 your_var,而 CF 看你要输出的文字是 AVERAGE/MAX/MIN/LAST 等数值,format 如同 printf 中的格式, EX: GPRINT:telnet:AVERAGE:"%10.0lf \n" 意即要输出这段时间中 (-s ~ -e 中,telnet的平均值,%10.0lf 则是为了好算位置)。
+LINE{1|2|3}:vname[#rrggbb[:legend]] LINE1:your_var#rgb颜色值:图例说明,这个 "your_var" 需存在 DEF 或 CDEF 的宣告中, AREA:vname[#rrggbb[:legend]] AREA 画出样本数值至 0 之间的区块图 STACK:vname[#rrggbb[:legend]] STACK 叠在上一个值上的图形 请注意,如果使用 AREA/STACK 时需特别注意图盖图的问题,一定要先画大的值, 再画小的值,这才会有层次的效果,不然,最大的数据若最后画,会盖住前面的数据 COMMENT 说明文字,如 COMMENT:"Last Updated" 将在图上产生该文字,可以用 \n 等换行符号 GPRINT GPRINT:vname:CF:format vname 即DEF 中的 your_var,而 CF 看你要输出的文字是 AVERAGE/MAX/MIN/LAST 等数值,format 如同 printf 中的格式, EX: GPRINT:telnet:AVERAGE:"%10.0lf \n" 意即要输出这段时间中 (-s ~ -e 中,telnet的平均值,%10.0lf 则是为了好算位置)。
