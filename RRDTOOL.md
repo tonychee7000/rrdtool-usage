@@ -158,7 +158,7 @@ Y轴说明
 * **[-h|--height pixels]**
 显示区的高度 
 
-* ** [-j|--only-graph]**
+* **[-j|--only-graph]**
 
 * **[-u|--upper-limit value]**  
 Y轴正值高度
