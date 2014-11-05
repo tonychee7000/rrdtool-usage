@@ -21,10 +21,12 @@ rrdtool create filename [--start|-b start time] [--step|-s step] [DS:ds-name:DST
     指定数据将要被填入RRD数据库的基本的时间间隔（默认是300秒）。
 
 >* DS:ds-name:DST:dst arguments   
-    单个RRD数据库可以接受来自几个数据源的输入。例如某个指定通讯线路上的进流量和出流量。在DS配置选项中，你必须为每个需要在RRD存储的数据源指定一些基本的属性。
-    *ds-name*是你要用来从某个RRD中引用的某个特定的数据源。ds-name必须为[a-zA-Z0-9]间的、长度为1－19个字符组成。
-    DST定义数据源的类型。数据源项的后续参数依赖于数据源的类型。对于GAUGE、COUNTER、DERIVE、以及ABSOLUTE，其数据源的格式为：
+    单个RRD数据库可以接受来自几个数据源的输入。例如某个指定通讯线路上的进流量和出流量。在DS配置选项中，你必须为每个需要在RRD存储的数据源指定一些基本的属性。  
+    *ds-name*是你要用来从某个RRD中引用的某个特定的数据源。ds-name必须为[a-zA-Z0-9]间的、长度为1－19个字符组成。  
+    DST定义数据源的类型。数据源项的后续参数依赖于数据源的类型。对于GAUGE、COUNTER、DERIVE、以及ABSOLUTE，其数据源的格式为：  
+    ```
     DS:ds-name:GAUGE | COUNTER | DERIVE | ABSOLUTE:heartbeat:min:max
+    ```
 
 对于COMPUTE数据源，其格式为:
 
