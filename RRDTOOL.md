@@ -67,11 +67,13 @@ RRDtool的创建功能能够设置一个新的RRD数据库文件。该功能完�
 ```
 RRA:AVERAGE | MIN | MAX | LAST:xff:steps:rows
 ```
-xff
+**xff**
 xfiles factor定义了在被归并数值仍然是一个未知时，*UNKNOWN*数据中，某个归并间隔的哪个部分可以采用。
-steps
+
+**steps**
 定义这些PDP中的多少个可以用来构建归并的数据点。
-rows
+
+**rows**
 定义在一个RRA归档中保留多少次的生成数据值。
 
 例1
