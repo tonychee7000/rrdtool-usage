@@ -80,7 +80,8 @@ xfiles factor定义了在被归并数值仍然是一个未知时，*UNKNOWN*数�
     - **rows**  
 定义在一个RRA归档中保留多少次的生成数据值。
 
-例1
+**例1**
+
 ```bash
 rrdtool create temperature.rrd --step 300 \
 DS:temp:GAUGE:600:-273:5000 \
@@ -94,7 +95,8 @@ RRA:AVERAGE:0.5:12:2400
 
 本例中同时还定义了几个归档区。第一个RRA归档区存储100小时内的温度（1200\*300秒=100小时）。第二个RRA存储每小时的最低温度（12\*300秒=1小时），共存储100天的数据（2400小时）。第三和第四个RRA分别存放最高温度和平均温度。
 
-例2
+**例2**
+
 ```bash
 rrdtool create proxy.rrd --step 300 \
 DS:Total:DERIVE:1800:0:U \
@@ -112,11 +114,14 @@ RRA:AVERAGE:0.5:1:2016
 rrdtool {update | updatev} filename [--template|-t ds-name[:ds-name]...] N|timestamp:value[:value...] at-timestamp@value[:value...] [timestamp:value[:value...] ...]
 ```
 
->filename ：要更新的RRD数据库的名称。
+* **filename**  
+要更新的RRD数据库的名称。
 
->--template|-t ds-name[:ds-name]... ：-t ds-name要更新RRD数据库中数据源的名称
+* **--template|-t ds-name[:ds-name]...**  
+要更新RRD数据库中数据源的名称
 
->N|timestamp:value[:value...]：时间：要更新的值...
+* **N|timestamp:value[:value...]：**
+时间：要更新的值...
 
 ```bash
 timestamp=`date -d "2003/08/15 12:00" +%s`
