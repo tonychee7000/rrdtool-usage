@@ -188,13 +188,11 @@ AREA 画出样本数值至 0 之间的区块图
 STACK是叠在上一个值上的图形  
 请注意,如果使用 AREA/STACK 时需特别注意图盖图的问题,一定要先画大的值, 再画小的值,这才会有层次的效果,不然,最大的数据若最后画,会盖住前面的数据。
 
-* **COMMENT** 
+* **COMMENT**   
 说明文字,如 COMMENT:"Last Updated" 将在图上产生该文字,可以用 \n 等换行符号
 
 * **GPRINT:vname:CF:format** 
     - *CF*是AVERAGE/MAX/MIN/LAST 等数值
     - *format*如同 printf 中的格式  
-```
-EX: GPRINT:telnet:AVERAGE:"%10.0lf \n"
-```
+EX: `GPRINT:telnet:AVERAGE:"%10.0lf \n"`
 意即要输出这段时间中(-s ~ -e)，telnet的平均值，%10.0lf 则是为了好算位置。
