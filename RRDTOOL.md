@@ -9,18 +9,18 @@ rrdtool create filename [--start|-b start time] [--step|-s step] [DS:ds-name:DST
 
 说明：
 
->RRDtool的创建功能能够设置一个新的RRD数据库文件。该功能完成所创建的文件全部被预填入 UNKNOWN 数值。
+RRDtool的创建功能能够设置一个新的RRD数据库文件。该功能完成所创建的文件全部被预填入 UNKNOWN 数值。
 
->* **filename**   
+* **filename**   
     需要创建的RRD的文件名。RRD数据库文件名应当以 .rrd作为扩展名。尽管RRDtool可以接受任何文件名。
 
->* **--start|-b start time(default: now - 10s)**  
+* **--start|-b start time(default: now - 10s)**  
     设定RRD数据库加入的第一个数据值的时间－从1970-01-01 UTC时间以来的时间（秒数）。RRDtool不会接受早于或在指定时刻上的任何数值。
 
->* **--step|-s step(default: 300 seconds)**   
+* **--step|-s step(default: 300 seconds)**   
     指定数据将要被填入RRD数据库的基本的时间间隔（默认是300秒）。
 
->* **DS:ds-name:DST:dst arguments**   
+* **DS:ds-name:DST:dst arguments**   
     单个RRD数据库可以接受来自几个数据源的输入。例如某个指定通讯线路上的进流量和出流量。在DS配置选项中，你必须为每个需要在RRD存储的数据源指定一些基本的属性。  
     *ds-name*是你要用来从某个RRD中引用的某个特定的数据源。ds-name必须为[a-zA-Z0-9]间的、长度为1－19个字符组成。  
     DST定义数据源的类型。数据源项的后续参数依赖于数据源的类型。   
@@ -52,9 +52,12 @@ rrdtool create filename [--start|-b start time] [--step|-s step] [DS:ds-name:DST
 用于存放对RRD中的其他数据源进行公式计算的结果。该数据源在更新时不需要提供数值，它是根据rpn－表达式定义的公式从数据源的PDPs中计算出来的PDP（Primary Data Point）。归并功能会被应用到COMPUTE数据源的PDPs上。在数据库软件中，此类数据集用“虚拟”或“计算”列表示。  
 
 heartbeat心跳定义了在两次数据源更新之间、在将数据源的数值确定为 UNKNOWN 前所允许的最大秒数。  
+
 min和max定义了数据源提供、预期的数值范围。任何数据源的超过min或max数值范围的数值，都将被认为是UNKNOWN 。如果你不知道或者不关心mix和max, 将他们设置为 unknown。注意min和max总是值数据源所处理的数值。对于一个流量计数器类型的DS来说，这可以是预期中该设备获取的数据率。  
 如果有可用的min/max的值信息，一定要设置min和max属性。这可以帮助RRDtool在更新时对提供的数据进行健壮检查。
+
 rpn－expression定义了由同一个RRD库的其他数据源的计算而来的、某个COMPUTE数据源的PDPs计算公式。这于graph命令的CDEF参数一样。请参看graph手册了解RPN操作符的列表和说明。对于COMPUTE数据源，不支持以下RPN操作符：COUNT、PREV、TIME、和LTIME。此外，在定义RPN表达式时，COMPUTE数据源只能够引用在create命令中列出的数据源。这于CDEF的限制是一样的，CDEF只能够引用在同一个graph命令中前面定义的DEFs和CDEFs。
+
 RRA:CF:cf arguments
 RRD的一个目的是在一个环型数据归档中存储数据。一个归档有大量的数据值或者每个已定义的数据源的统计，而且它是在一个RRA行中被定义的。
 当一个数据进入RRD数据库时，首先填入到用 -s 选项所定义的步长的时隙中的数据，就成为一个pdp值－首要数据点（Primary Data Point）。
