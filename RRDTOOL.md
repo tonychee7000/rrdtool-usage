@@ -26,13 +26,11 @@ rrdtool create filename [--start|-b start time] [--step|-s step] [DS:ds-name:DST
     DST定义数据源的类型。数据源项的后续参数依赖于数据源的类型。对于GAUGE、COUNTER、DERIVE、以及ABSOLUTE，其数据源的格式为：  
     ```
     DS:ds-name:GAUGE | COUNTER | DERIVE | ABSOLUTE:heartbeat:min:max
+    ```  
+    对于COMPUTE数据源，其格式为:  
     ```
-
-对于COMPUTE数据源，其格式为:
-
-```
-DS:ds-name:COMPUTE:rpn-expression
-```
+    DS:ds-name:COMPUTE:rpn-expression
+    ```
 
 要确定使用哪种数据源类型，请检查下面的定义。
 >GAUGE
