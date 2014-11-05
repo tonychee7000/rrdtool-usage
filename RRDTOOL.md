@@ -11,16 +11,16 @@ rrdtool create filename [--start|-b start time] [--step|-s step] [DS:ds-name:DST
 
 >RRDtool的创建功能能够设置一个新的RRD数据库文件。该功能完成所创建的文件全部被预填入 UNKNOWN 数值。
 
->* *filename*   
+>* **filename**   
     需要创建的RRD的文件名。RRD数据库文件名应当以 .rrd作为扩展名。尽管RRDtool可以接受任何文件名。
 
->* *--start|-b start time(default: now - 10s)*  
+>* **--start|-b start time(default: now - 10s)**  
     设定RRD数据库加入的第一个数据值的时间－从1970-01-01 UTC时间以来的时间（秒数）。RRDtool不会接受早于或在指定时刻上的任何数值。
 
->* *--step|-s step(default: 300 seconds)*   
+>* **--step|-s step(default: 300 seconds)**   
     指定数据将要被填入RRD数据库的基本的时间间隔（默认是300秒）。
 
->* *DS:ds-name:DST:dst arguments*   
+>* **DS:ds-name:DST:dst arguments**   
     单个RRD数据库可以接受来自几个数据源的输入。例如某个指定通讯线路上的进流量和出流量。在DS配置选项中，你必须为每个需要在RRD存储的数据源指定一些基本的属性。  
     *ds-name*是你要用来从某个RRD中引用的某个特定的数据源。ds-name必须为[a-zA-Z0-9]间的、长度为1－19个字符组成。  
     DST定义数据源的类型。数据源项的后续参数依赖于数据源的类型。对于GAUGE、COUNTER、DERIVE、以及ABSOLUTE，其数据源的格式为：  
