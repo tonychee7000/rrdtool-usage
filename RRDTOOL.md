@@ -37,13 +37,13 @@ RRDtool的创建功能能够设置一个新的RRD数据库文件。该功能完�
 
     要确定使用哪种数据源类型，请检查下面的定义。
     - **GAUGE**  
-    是像温度计、或者某个房间内的人数、或共享Redhat的值这样的东西。
+是像温度计、或者某个房间内的人数、或共享Redhat的值这样的东西。
 
     - **COUNTER**  
-    是像路由器中 ifInOctets 计数器这样会持续递增的计数器。COUNTER数据源假设计算机永远不会减小，除非计数器溢出。update功能可能导致溢出。计算机是按照每秒的频率存储的。当计数器溢出时，RRDtool会检查该溢出是否会发生在32位或64位边界，并且相应的把合适的值加入结果中。
+是像路由器中 ifInOctets 计数器这样会持续递增的计数器。COUNTER数据源假设计算机永远不会减小，除非计数器溢出。update功能可能导致溢出。计算机是按照每秒的频率存储的。当计数器溢出时，RRDtool会检查该溢出是否会发生在32位或64位边界，并且相应的把合适的值加入结果中。
 
     - **DERIVE**  
-    存放该数据源从以往到差异线。这对于gauges类型非常有用，它可用来衡量进出某个房间的比率。在derive内部，与COUNTER几乎是一样的，但是没有溢出检查。因此，如果你的计数器在32或64位不会复位，你应当使用DERIVE或者用一个MIN值为0的混合使用。  
+ 存放该数据源从以往到差异线。这对于gauges类型非常有用，它可用来衡量进出某个房间的比率。在derive内部，与COUNTER几乎是一样的，但是没有溢出检查。因此，如果你的计数器在32或64位不会复位，你应当使用DERIVE或者用一个MIN值为0的混合使用。  
 如果你不容许偶尔发生的、某个计数器的合法回绕复位而造成的错误，而要用“unknowns”来对表示所有计数器的合法回绕和复位，你就要使用min=0的DERIVE类型。否则，使用具有合理max的COUNTER类型，会为所有的合法计数器回绕返回正确的值。  
 对于一个步长为5分钟的32位计数器，计数器回绕复位的错误概率大约为：每1Mbps的最大带宽发生概率为0.8%.注意这等价于100Mbps接口的80%，因此对于高带宽接口和32位计数器，最好使用带有min=0的DERIVE。如果你使用的是64位计数器，只有任何最大值的设定可以避免计数器回绕的错误发生的可能性。  
 
@@ -57,7 +57,7 @@ RRDtool的创建功能能够设置一个新的RRD数据库文件。该功能完�
 定义了在两次数据源更新之间、在将数据源的数值确定为 UNKNOWN 前所允许的最大秒数。  
 
     - **min**和**max**   
-    定义了数据源提供、预期的数值范围。任何数据源的超过min或max数值范围的数值，都将被认为是UNKNOWN 。如果你不知道或者不关心mix和max, 将他们设置为 unknown。注意min和max总是值数据源所处理的数值。对于一个流量计数器类型的DS来说，这可以是预期中该设备获取的数据率。  
+定义了数据源提供、预期的数值范围。任何数据源的超过min或max数值范围的数值，都将被认为是UNKNOWN 。如果你不知道或者不关心mix和max, 将他们设置为 unknown。注意min和max总是值数据源所处理的数值。对于一个流量计数器类型的DS来说，这可以是预期中该设备获取的数据率。  
 如果有可用的min/max的值信息，一定要设置min和max属性。这可以帮助RRDtool在更新时对提供的数据进行健壮检查。
 
     - **rpn-expression**  
@@ -67,6 +67,7 @@ RRDtool的创建功能能够设置一个新的RRD数据库文件。该功能完�
     RRD的一个目的是在一个环型数据归档中存储数据。一个归档有大量的数据值或者每个已定义的数据源的统计，而且它是在一个RRA行中被定义的。  
 当一个数据进入RRD数据库时，首先填入到用 -s 选项所定义的步长的时隙中的数据，就成为一个pdp值－首要数据点（Primary Data Point）。  
 该数据也会被用该归档的CF归并函数进行处理。可以把各个PDPs通过某个聚合函数进行归并的归并函数有这样几种：AVERAGE、MIN、MAX、LAST等。这些归并函数的RRA命令行格式为:  
+
     ```
     RRA:AVERAGE | MIN | MAX | LAST:xff:steps:rows
     ```  
@@ -167,14 +168,20 @@ Y轴负值高度
 
 * **[-r|--rigid]**
 
-* **DEF:vname=rrdfile:ds-name:CF[:step=step][:start=time][:end=time]**
+* **DEF:vname=rrdfile:ds-name:CF[:step=step][:start=time][:end=time]**  
 主要用处是说明您要取出那个RRD档案的 DSN 到这个 graph 的参数中来 
 
-* **CDEF:vname=RPN expression**
-CDEF 通过运算得到一个虚拟的变量，其运算式需写成后序
-EX: a=1+3 写成 `a=1,3 +`
+* **CDEF:vname=RPN expression**  
+CDEF 通过运算得到一个虚拟的变量，其运算式需写成后序  
+EX: `a=1+3` 写成 `a=1,3 +`
 
 * **VDEF:vname=RPN expression**
 
 
-LINE{1|2|3}:vname[#rrggbb[:legend]] LINE1:your_var#rgb颜色值:图例说明,这个 "your_var" 需存在 DEF 或 CDEF 的宣告中, AREA:vname[#rrggbb[:legend]] AREA 画出样本数值至 0 之间的区块图 STACK:vname[#rrggbb[:legend]] STACK 叠在上一个值上的图形 请注意,如果使用 AREA/STACK 时需特别注意图盖图的问题,一定要先画大的值, 再画小的值,这才会有层次的效果,不然,最大的数据若最后画,会盖住前面的数据 COMMENT 说明文字,如 COMMENT:"Last Updated" 将在图上产生该文字,可以用 \n 等换行符号 GPRINT GPRINT:vname:CF:format vname 即DEF 中的 your_var,而 CF 看你要输出的文字是 AVERAGE/MAX/MIN/LAST 等数值,format 如同 printf 中的格式, EX: GPRINT:telnet:AVERAGE:"%10.0lf \n" 意即要输出这段时间中 (-s ~ -e 中,telnet的平均值,%10.0lf 则是为了好算位置)。
+* **LINE{1|2|3}:vname[#rrggbb[:legend]]**  
+LINE1:your_var#rgb颜色值:图例说明,这个 "your_var" 需存在 DEF 或 CDEF 的宣告中, 
+AREA:vname[#rrggbb[:legend]] AREA 画出样本数值至 0 之间的区块图 
+STACK:vname[#rrggbb[:legend]] STACK 叠在上一个值上的图形 请注意,如果使用 AREA/STACK 时需特别注意图盖图的问题,一定要先画大的值, 再画小的值,这才会有层次的效果,不然,最大的数据若最后画,会盖住前面的数据 
+COMMENT 说明文字,如 COMMENT:"Last Updated" 将在图上产生该文字,可以用 \n 等换行符号 
+GPRINT GPRINT:vname:CF:format vname 即DEF 中的 your_var,而 CF 看你要输出的文字是 AVERAGE/MAX/MIN/LAST 等数值,
+format 如同 printf 中的格式, EX: GPRINT:telnet:AVERAGE:"%10.0lf \n" 意即要输出这段时间中 (-s ~ -e 中,telnet的平均值,%10.0lf 则是为了好算位置)。
