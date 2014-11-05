@@ -96,11 +96,16 @@ RRA:AVERAGE:0.5:1:2016
 ```bash
 rrdtool {update | updatev} filename [--template|-t ds-name[:ds-name]...] N|timestamp:value[:value...] at-timestamp@value[:value...] [timestamp:value[:value...] ...]
 ```
-filename ：要更新的RRD数据库的名称。
---template|-t ds-name[:ds-name]... ：-t ds-name要更新RRD数据库中数据源的名称
-N|timestamp:value[:value...]：时间：要更新的值...
-代码:
-$>timestamp=`date -d "2003/08/15 12:00" +%s`
+
+>filename ：要更新的RRD数据库的名称。
+
+>--template|-t ds-name[:ds-name]... ：-t ds-name要更新RRD数据库中数据源的名称
+
+>N|timestamp:value[:value...]：时间：要更新的值...
+
+```bash
+timestamp=`date -d "2003/08/15 12:00" +%s`
+```
 
 ##3.如何绘制rrd环型数据库中的采集到的数据
 
@@ -109,17 +114,22 @@ rrdtool graph filename [option ...] [data definition ...] [data calculation ...]
 ```
 
 >filename 要绘制的图片名称
+
 >Time range时间范围
+
 >[-s|--start time] 启始时间[-e|--end time]结束时间 [-S|--step seconds]步长
-Labels
-[-t|--title string]图片的标题 [-v|--vertical-label string] Y轴说明
-Size
-[-w|--width pixels] 显示区的宽度[-h|--height pixels]显示区的高度 [-j|--only-graph]
-Limits
-[-u|--upper-limit value] Y轴正值高度[-l|--lower-limit value]Y轴负值高度 [-r|--rigid]
-Data and variables
-DEF:vname=rrdfile:ds-name:CF[:step=step][:start=time][:end=time]
-CDEF:vname=RPN expression
-VDEF:vname=RPN expression
+
+>[-t|--title string]图片的标题 [-v|--vertical-label string] Y轴说明
+
+>[-w|--width pixels] 显示区的宽度[-h|--height pixels]显示区的高度 [-j|--only-graph]
+
+>[-u|--upper-limit value] Y轴正值高度[-l|--lower-limit value]Y轴负值高度 [-r|--rigid]
+
+>DEF:vname=rrdfile:ds-name:CF[:step=step][:start=time][:end=time]
+
+>CDEF:vname=RPN expression
+
+>VDEF:vname=RPN expression
+
 
 主要用处是说明您要取出那个RRD档案的 DSN 到这个 graph 的参数中来 CDEF 通过运算得到一个虚拟的变量,,其运算式需写成后序 EX: a=1+3 写成 a=1,3 + LINE{1|2|3}:vname[#rrggbb[:legend]] LINE1:your_var#rgb颜色值:图例说明,这个 "your_var" 需存在 DEF 或 CDEF 的宣告中, AREA:vname[#rrggbb[:legend]] AREA 画出样本数值至 0 之间的区块图 STACK:vname[#rrggbb[:legend]] STACK 叠在上一个值上的图形 请注意,如果使用 AREA/STACK 时需特别注意图盖图的问题,一定要先画大的值, 再画小的值,这才会有层次的效果,不然,最大的数据若最后画,会盖住前面的数据 COMMENT 说明文字,如 COMMENT:"Last Updated" 将在图上产生该文字,可以用 \n 等换行符号 GPRINT GPRINT:vname:CF:format vname 即DEF 中的 your_var,而 CF 看你要输出的文字是 AVERAGE/MAX/MIN/LAST 等数值,format 如同 printf 中的格式, EX: GPRINT:telnet:AVERAGE:"%10.0lf \n" 意即要输出这段时间中 (-s ~ -e 中,telnet的平均值,%10.0lf 则是为了好算位置)。
