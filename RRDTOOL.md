@@ -23,7 +23,8 @@ rrdtool create filename [--start|-b start time] [--step|-s step] [DS:ds-name:DST
 >* **DS:ds-name:DST:dst arguments**   
     单个RRD数据库可以接受来自几个数据源的输入。例如某个指定通讯线路上的进流量和出流量。在DS配置选项中，你必须为每个需要在RRD存储的数据源指定一些基本的属性。  
     *ds-name*是你要用来从某个RRD中引用的某个特定的数据源。ds-name必须为[a-zA-Z0-9]间的、长度为1－19个字符组成。  
-    DST定义数据源的类型。数据源项的后续参数依赖于数据源的类型。对于GAUGE、COUNTER、DERIVE、以及ABSOLUTE，其数据源的格式为：  
+    DST定义数据源的类型。数据源项的后续参数依赖于数据源的类型。   
+    对于GAUGE、COUNTER、DERIVE、以及ABSOLUTE，其数据源的格式为：  
     ```
     DS:ds-name:GAUGE | COUNTER | DERIVE | ABSOLUTE:heartbeat:min:max
     ```  
@@ -42,17 +43,18 @@ rrdtool create filename [--start|-b start time] [--step|-s step] [DS:ds-name:DST
 >DERIVE
     存放该数据源从以往到差异线。这对于gauges类型非常有用，它可用来衡量进出某个房间的比率。在derive内部，与COUNTER几乎是一样的，但是没有溢出检查。因此，如果你的计数器在32或64位不会复位，你应当使用DERIVE或者用一个MIN值为0的混合使用。
 
-###关于COUNTER vs DERIVE的说明
+关于COUNTER vs DERIVE的说明
 
 如果你不容许偶尔发生的、某个计数器的合法回绕复位而造成的错误，而要用“unknowns”来对表示所有计数器的合法回绕和复位，你就要使用min=0的DERIVE类型。否则，使用具有合理max的COUNTER类型，会为所有的合法计数器回绕返回正确的值。
 
 对于一个步长为5分钟的32位计数器，计数器回绕复位的错误概率大约为：每1Mbps的最大带宽发生概率为0.8%.注意这等价于100Mbps接口的80%，因此对于高带宽接口和32位计数器，最好使用带有min=0的DERIVE。如果你使用的是64位计数器，只有任何最大值的设定可以避免计数器回绕的错误发生的可能性。
-####ABSOLUTE
+
+* ABSOLUTE  
 读取后马上复位的计数器。用于易于溢出的快速计数器。因此，不要常规地读取他们，你需要自每次读取后确认在下一次溢出前有一个最大的有效时间。该类型的另外一个用途是你需要累积上次更新以来的信息数目。
-####COMPUTE
-用于存放对RRD中的其他数据源进行公式计算的结果。该数据源在更新时不需要提供数值，它是根据rpn－表达式定义的公式从数据源的PDPs中计算出来的PDP（Primary Data Point）。归并功能会被应用到COMPUTE数据源的PDPs上。在数据库软件中，此类数据集用"虚拟‘ 或 ’计算‘ 列表示。
-heartbeat心跳定义了在两次数据源更新之间、在将数据源的数值确定为 UNKNOWN 前所允许的最大秒数。
-min和max定义了数据源提供、预期的数值范围。任何数据源的超过min或max数值范围的数值，都将被认为是UNKNOWN 。如果你不知道或者不关心mix和max, 将他们设置为 unknown。注意min和max总是值数据源所处理的数值。对于一个流量计数器类型的DS来说，这可以是预期中该设备获取的数据率。
+* COMPUTE  
+用于存放对RRD中的其他数据源进行公式计算的结果。该数据源在更新时不需要提供数值，它是根据rpn－表达式定义的公式从数据源的PDPs中计算出来的PDP（Primary Data Point）。归并功能会被应用到COMPUTE数据源的PDPs上。在数据库软件中，此类数据集用"虚拟‘ 或 ’计算‘ 列表示。  
+heartbeat心跳定义了在两次数据源更新之间、在将数据源的数值确定为 UNKNOWN 前所允许的最大秒数。  
+min和max定义了数据源提供、预期的数值范围。任何数据源的超过min或max数值范围的数值，都将被认为是UNKNOWN 。如果你不知道或者不关心mix和max, 将他们设置为 unknown。注意min和max总是值数据源所处理的数值。对于一个流量计数器类型的DS来说，这可以是预期中该设备获取的数据率。  
 如果有可用的min/max的值信息，一定要设置min和max属性。这可以帮助RRDtool在更新时对提供的数据进行健壮检查。
 rpn－expression定义了由同一个RRD库的其他数据源的计算而来的、某个COMPUTE数据源的PDPs计算公式。这于graph命令的CDEF参数一样。请参看graph手册了解RPN操作符的列表和说明。对于COMPUTE数据源，不支持以下RPN操作符：COUNT、PREV、TIME、和LTIME。此外，在定义RPN表达式时，COMPUTE数据源只能够引用在create命令中列出的数据源。这于CDEF的限制是一样的，CDEF只能够引用在同一个graph命令中前面定义的DEFs和CDEFs。
 RRA:CF:cf arguments
