@@ -53,12 +53,15 @@ RRDtool的创建功能能够设置一个新的RRD数据库文件。该功能完�
     - **COMPUTE**  
 用于存放对RRD中的其他数据源进行公式计算的结果。该数据源在更新时不需要提供数值，它是根据rpn－表达式定义的公式从数据源的PDPs中计算出来的PDP（Primary Data Point）。归并功能会被应用到COMPUTE数据源的PDPs上。在数据库软件中，此类数据集用“虚拟”或“计算”列表示。  
 
-**heartbeat**心跳定义了在两次数据源更新之间、在将数据源的数值确定为 UNKNOWN 前所允许的最大秒数。  
+    - **heartbeat**  
+定义了在两次数据源更新之间、在将数据源的数值确定为 UNKNOWN 前所允许的最大秒数。  
 
-**min**和**max**定义了数据源提供、预期的数值范围。任何数据源的超过min或max数值范围的数值，都将被认为是UNKNOWN 。如果你不知道或者不关心mix和max, 将他们设置为 unknown。注意min和max总是值数据源所处理的数值。对于一个流量计数器类型的DS来说，这可以是预期中该设备获取的数据率。  
+    - **min**和**max**  
+    定义了数据源提供、预期的数值范围。任何数据源的超过min或max数值范围的数值，都将被认为是UNKNOWN 。如果你不知道或者不关心mix和max, 将他们设置为 unknown。注意min和max总是值数据源所处理的数值。对于一个流量计数器类型的DS来说，这可以是预期中该设备获取的数据率。  
 如果有可用的min/max的值信息，一定要设置min和max属性。这可以帮助RRDtool在更新时对提供的数据进行健壮检查。
 
-**rpn－expression**定义了由同一个RRD库的其他数据源的计算而来的、某个COMPUTE数据源的PDPs计算公式。这于graph命令的CDEF参数一样。请参看graph手册了解RPN操作符的列表和说明。对于COMPUTE数据源，不支持以下RPN操作符：COUNT、PREV、TIME、和LTIME。此外，在定义RPN表达式时，COMPUTE数据源只能够引用在create命令中列出的数据源。这于CDEF的限制是一样的，CDEF只能够引用在同一个graph命令中前面定义的DEFs和CDEFs。
+    - **rpn－expression**  
+定义了由同一个RRD库的其他数据源的计算而来的、某个COMPUTE数据源的PDPs计算公式。这于graph命令的CDEF参数一样。请参看graph手册了解RPN操作符的列表和说明。对于COMPUTE数据源，不支持以下RPN操作符：COUNT、PREV、TIME、和LTIME。此外，在定义RPN表达式时，COMPUTE数据源只能够引用在create命令中列出的数据源。这于CDEF的限制是一样的，CDEF只能够引用在同一个graph命令中前面定义的DEFs和CDEFs。
 
 * **RRA:CF:cf arguments**
     RRD的一个目的是在一个环型数据归档中存储数据。一个归档有大量的数据值或者每个已定义的数据源的统计，而且它是在一个RRA行中被定义的。  
